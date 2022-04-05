@@ -1,0 +1,80 @@
+//Kamil Mrowiec
+//21308225
+
+
+import java.util.*;
+import java.io.*;
+
+
+public class Dictionary {
+    private final ArrayList<String> words;
+    private final int shortest;
+    private final int longest;
+
+    public Dictionary(String filepath, int shortest, int longest){
+        this.words = new ArrayList<>();
+        this.shortest = shortest;
+        this.longest = longest;
+
+        try{
+            File dataFile = new File(filepath);
+            Scanner dataSource = new Scanner(dataFile);
+
+            while(dataSource.hasNextLine()) {
+                String line = dataSource.nextLine();
+                String[] lsplit = line.split(",");
+
+                for(String word: lsplit){
+                    String trimm = word.trim();
+                    String word_uppercase = trimm.toUpperCase();
+
+                    if(trimm.length() >= this.shortest && trimm.length() <= this.longest){
+                        if(!this.words.contains(word_uppercase)){
+                            this.words.add(word_uppercase);
+                            
+                        }
+                    }
+                }
+            }
+
+            Collections.sort(this.words);
+
+        }catch (IOException e){
+            System.out.println("File does not exist");
+        }
+    }
+    
+    public boolean add(String word){
+        String trimm = word.trim();
+        String upcase = trimm.toUpperCase();
+
+        if(trimm.length() >= this.shortest && trimm.length() <= this.longest){
+            if(!this.words.contains(upcase)){
+                this.words.add(upcase);
+                Collections.sort(this.words);
+                return true;
+                
+            }
+            
+        }
+        return false;
+        
+    }
+
+    public String nextWord(){
+        if(this.words.size() == 0){
+            return "";
+            
+        }
+        int random = (int)(Math.random() * this.words.size());
+        return this.words.get(random);
+        
+    }
+
+    public boolean inDictionary(String word){
+        String trimm = word.trim();
+        String upcase = trimm.toUpperCase();
+
+        return this.words.contains(upcase);
+    }
+}
